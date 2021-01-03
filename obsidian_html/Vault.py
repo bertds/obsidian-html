@@ -73,11 +73,11 @@ class Vault:
 
     def _find_media_files(self, vault_root, extra_folders):
         # Find all media-files in vault root.
-        media_files = self._find_media_files(vault_root)
+        media_files = self._find_image_files(vault_root)
 
         # Find all media-files in each extra folder.
         for folder in extra_folders:
-            media_files += self._find_media_files(os.path.join(vault_root, folder), is_extra_dir=True)
+            media_files += self._find_image_files(os.path.join(vault_root, folder), is_extra_dir=True)
 
         return media_files
 
@@ -101,12 +101,12 @@ class Vault:
 
         return md_files
 
-    def _find_media_files(self, root, is_extra_dir=False):
-        media_files = []
-        for media_file in os.listdir(root):
+    def _find_image_files(self, root, is_extra_dir=False):
+        image_files = []
+        for image_file in os.listdir(root):
             # Check if the element in 'root' has a media extension and is indeed a file indeed
-            if media_file.lower().endswith(('.png', '.jpg', '.jpeg')) and os.path.isfile(os.path.join(root, media_file)):
-                print(f'mediafile : {media_file}')
-                media_files.append(os.path.join(root, media_file))
+            if image_file.lower().endswith(('.png', '.jpg', '.jpeg')) and os.path.isfile(os.path.join(root, image_file)):
+                print(f'mediafile : {image_file}')
+                image_files.append(os.path.join(root, image_file))
 
-        return media_files
+        return image_files
