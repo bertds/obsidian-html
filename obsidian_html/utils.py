@@ -11,6 +11,7 @@ def slug_case(text):
 
 
 def md_link(text, link):
+    # for png keep the original link name
     print(text, link)
     if re.search(r".*png$", text) is None:
         result = "[" + text + "](" + link + (".html" if GLOBAL.HTML_LINK_EXTENSIONS else "") + ")"

@@ -41,3 +41,5 @@ def main():
     GLOBAL.HTML_LINK_EXTENSIONS = args.extensions
     vault = Vault(args.Vault, extra_folders=args.dirs, html_template=args.template, filter=args.filter)
     vault.export_html(args.output_dir)
+    print('start copy')
+    vault.copy_media(args.output_dir)

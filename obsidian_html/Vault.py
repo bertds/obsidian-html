@@ -1,5 +1,6 @@
 import os
 import regex as re
+import shutil
 from obsidian_html.utils import slug_case, md_link, render_markdown
 from obsidian_html.Note import Note
 
@@ -9,6 +10,7 @@ class Vault:
         self.vault_root = vault_root
         self.filter = filter
         self.notes = self._find_files(vault_root, extra_folders)
+        self.media = self._find_media_files(vault_root, extra_folders)
         self.extra_folders = extra_folders
         self._add_backlinks()
 
@@ -46,6 +48,17 @@ class Vault:
             with open(os.path.join(out_dir, note.filename_html), "w", encoding="utf8") as f:
                 f.write(html)
 
+    def copy_media(self, out_dir):
+        # Ensure out_dir exists, as well as its sub-folders.
+        if not os.path.exists(out_dir):
+            os.makedirs(out_dir)
+        for folder in self.extra_folders:
+            if not os.path.exists(os.path.join(out_dir, folder)):
+                os.makedirs(os.path.join(out_dir, folder))
+
+        for media in self.media:
+            print(f'copying {media}')
+            shutil.copy2(media, out_dir)  # target filename is /dst/dir/file.ext
 
     def _find_files(self, vault_root, extra_folders):
         # Find all markdown-files in vault root.
@@ -58,6 +71,15 @@ class Vault:
 
         return md_files
 
+    def _find_media_files(self, vault_root, extra_folders):
+        # Find all media-files in vault root.
+        media_files = self._find_media_files(vault_root)
+
+        # Find all media-files in each extra folder.
+        for folder in extra_folders:
+            media_files += self._find_media_files(os.path.join(vault_root, folder), is_extra_dir=True)
+
+        return media_files
 
     def _find_md_files(self, root, is_extra_dir=False):
         md_files = []
@@ -78,3 +100,13 @@ class Vault:
                 md_files.append(note)
 
         return md_files
+
+    def _find_media_files(self, root, is_extra_dir=False):
+        media_files = []
+        for media_file in os.listdir(root):
+            # Check if the element in 'root' has a media extension and is indeed a file indeed
+            if media_file.lower().endswith(('.png', '.jpg', '.jpeg')) and os.path.isfile(os.path.join(root, media_file)):
+                print(f'mediafile : {media_file}')
+                media_files.append(os.path.join(root, media_file))
+
+        return media_files
