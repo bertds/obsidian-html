@@ -11,10 +11,13 @@ def slug_case(text):
 
 
 def md_link(text, link):
+    print(text, link)
     if re.search(r".*png$", text) is None:
-        return "[" + text + "](" + link + (".html" if GLOBAL.HTML_LINK_EXTENSIONS else "") + ")"
+        result = "[" + text + "](" + link + (".html" if GLOBAL.HTML_LINK_EXTENSIONS else "") + ")"
     else:
-        return "[" + text + "](" + text + ")"
+        result = "[" + text + "](" + text + ")"
+    print(result)
+    return result
 
 
 def extract_links_from_file(document):
