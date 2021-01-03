@@ -51,6 +51,7 @@ class Vault:
         # Find all markdown-files in vault root.
         md_files = self._find_md_files(vault_root)
 
+        # extra_folders = [x[0] for x in os.walk(vault_root)]
         # Find all markdown-files in each extra folder.
         for folder in extra_folders:
             md_files += self._find_md_files(os.path.join(vault_root, folder), is_extra_dir=True)
